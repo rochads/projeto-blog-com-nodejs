@@ -12,6 +12,14 @@ const Category = new Schema({
         required: true
     },
 
+    // forçando erro no BD na hora de salvar a categoria para testar a error_msg
+    /* 
+    test: {
+        type: String,
+        required: true
+    },
+    */
+
     date: {
         type: Date,
         default: Date.now()

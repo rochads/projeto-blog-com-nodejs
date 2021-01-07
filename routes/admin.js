@@ -23,17 +23,37 @@ admin.get('/categories/add', (req, res) => {
 
 admin.post('/categories/new', (req, res) => {
 
-    const newCategory = {
-        name: req.body.name,
-        slug: req.body.slug
+    let errors = []
+
+    if (!req.body.name) {
+        errors.push({text: "Nome inválido!"})
+    } 
+    
+    if (!req.body.slug) {
+        errors.push({text: "Slug inválido!"})
     }
 
-    new Category(newCategory).save().then(() => {
-        console.log("Categoria salva com sucesso!")
-    }).catch((err) => {
-        console.log(`Houve um erro ao salvar a categoria: ${err}`)
-    })
+    if (req.body.name.length < 2) {
+        errors.push({text: "Nome muito curto!"})
+    }
 
+    if (errors.length > 0) {
+        res.render('admin/addcategories', {errors: errors})
+    } else {
+        const newCategory = {
+            name: req.body.name,
+            slug: req.body.slug
+        }
+    
+        new Category(newCategory).save().then(() => {
+            req.flash("success_msg", "Categoria salva com sucesso!")
+            res.redirect('/admin/categories')
+        }).catch((err) => {
+            console.log(`Houve um erro ao salvar a categoria: ${err}`)
+            req.flash("error_msg", "Houve um erro ao salvar a categoria, tente novamente!")
+            res.redirect('/admin/categories')
+        })
+    }
 })
 
 module.exports = admin
