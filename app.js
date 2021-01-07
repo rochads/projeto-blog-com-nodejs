@@ -3,7 +3,7 @@ const express = require('express')
 const handlebars = require('express-handlebars')
 const app = express()
 const bodyParser = require('body-parser')
-//const mongoose = require('mongoose)
+const mongoose = require('mongoose')
 const path = require('path')
 const admin = require('./routes/admin')
 
@@ -15,7 +15,12 @@ app.use(bodyParser.json())
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 /* mongoose */
-// em breve
+//mongoose.Promise = global.Promise // aula 35: desconsiderei, pois não houve explicação (obs: não li documentação!).
+mongoose.connect("mongodb://localhost/blogapp").then(() => {
+    console.log('Conectado ao MongoDB')
+}).catch((err) => {
+    (`Houve um problema ao conectar ao MongoDB: ${err}`)
+})
 /* public */
 app.use(express.static(path.join(__dirname, 'public')))
 
