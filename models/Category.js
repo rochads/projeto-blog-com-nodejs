@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Categoria = new Schema({
-    nome: {
+const Category = new Schema({
+    name: {
         type: String,
         required: true
     },
@@ -20,7 +20,7 @@ const Categoria = new Schema({
 
 /*
 Poderia ser:
-Const Categoria = new mongoose.Schema (eliminaria linhas 2 e 4)
+Const Category = new mongoose.Schema (eliminaria linhas 2 e 4)
 */
 
 mongoose.model('categories', Category)
