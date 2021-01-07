@@ -2,7 +2,7 @@ const express = require('express')
 const admin = express.Router()
 
 admin.get('/', (req, res) => {
-    res.send("Página principal do painel administrativo!")
+    res.render('admin/admin')
 })
 
 admin.get('/posts', (req, res) => {
