@@ -6,8 +6,24 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
 const admin = require('./routes/admin')
+const session = require('express-session')
+const flash = require('connect-flash')
 
 /* SETTINGS */
+/* session - tem que ser configurado no início*/
+app.use(session({
+    secret: "cursodenode",
+    resave: true,
+    saveUninitialized: true
+}))
+/* flash - tem que ser configurado abaixo da sessão */
+app.use(flash())
+/* Middleware para trabalhar com sessão */
+app.use((req,res,next) => {
+    res.locals.success_msg = req.flash("success_msg")
+    res.locals.error_msg = req.flash("error_msg")
+    next()
+})
 /* body-parser */
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
