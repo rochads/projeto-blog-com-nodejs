@@ -14,7 +14,17 @@ admin.get('/posts', (req, res) => {
 })
 
 admin.get('/categories', (req, res) => {
-    res.render('admin/categories')
+
+    // adicionado .lean() para listar categorias
+    // adicionar .sort({date: 'desc'}) depois de .lean() para listar do mais novo para mais antigo
+    Category.find().lean().then((categories) => {
+        //console.log(categories)
+        res.render('admin/categories', {categories: categories})
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao listar as categorias!")
+        res.redirect('/admin')
+    })
+
 })
 
 admin.get('/categories/add', (req, res) => {
