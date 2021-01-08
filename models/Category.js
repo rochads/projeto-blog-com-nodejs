@@ -13,7 +13,7 @@ const Category = new Schema({
     },
 
     // forçando erro no BD na hora de salvar a categoria para testar a error_msg
-    /* 
+    /*
     test: {
         type: String,
         required: true

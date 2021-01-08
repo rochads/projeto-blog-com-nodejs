@@ -66,4 +66,34 @@ admin.post('/categories/new', (req, res) => {
     }
 })
 
+admin.get('/categories/edit/:id', (req, res) => {
+        Category.findOne({_id: req.params.id}).lean().then((category) => {
+            res.render("admin/editcategories", {category: category})
+        }).catch((err) => {
+            req.flash("error_msg", "Erro! Tente novamente.")
+            res.redirect("/admin/categories")
+        })
+})
+
+admin.post('/categories/edit', (req, res) => {
+    // sem sistema de validação para não ficar repetitivo!
+    Category.findOne({_id: req.body.id}).then((category) => {
+
+        category.name = req.body.name
+        category.slug = req.body.slug
+
+        category.save().then(() => {
+            req.flash("success_msg", "Categoria salva com sucesso!")
+            res.redirect('/admin/categories')
+        }).catch((err) => {
+            req.flash("error_msg", "Houve um erro interno ao salvar a edição da categoria!")
+            res.redirect("/admin/categories")
+        })
+
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao editar a categoria!")
+        res.redirect("/admin/categories")
+    })
+})
+
 module.exports = admin
