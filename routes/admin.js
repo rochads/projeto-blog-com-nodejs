@@ -10,10 +10,6 @@ admin.get('/', (req, res) => {
     res.render('admin/admin')
 })
 
-admin.get('/posts', (req, res) => {
-    res.send("Página de posts!")
-})
-
 admin.get('/categories', (req, res) => {
 
     // adicionado .lean() para listar categorias
@@ -105,6 +101,21 @@ admin.post("/categories/delete", (req, res) => {
         req.flash("error_msg", "Houve um erro ao deletar a categoria!")
         res.redirect("/admin/categories")
     })
+})
+
+admin.get('/posts', (req, res) => {
+    res.render('admin/posts')
+})
+
+admin.get('/posts/add', (req, res) => {
+    
+    Category.find().lean().then((categories) => {
+        res.render('admin/addposts', {categories: categories})
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao listar as categorias!")
+        res.redirect("/admin")
+    })
+    
 })
 
 module.exports = admin
