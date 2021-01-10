@@ -5,6 +5,8 @@ const admin = express.Router()
 const mongoose = require("mongoose")
 require("../models/Category")
 const Category = mongoose.model("categories")
+require("../models/Post")
+const Post = mongoose.model("posts")
 
 admin.get('/', (req, res) => {
     res.render('admin/admin')
@@ -116,6 +118,36 @@ admin.get('/posts/add', (req, res) => {
         res.redirect("/admin")
     })
     
+})
+
+admin.post('/posts/new', (req, res) => {
+
+    let errors = []
+
+    if (req.body.category == "0") {
+        errors.push({text: "Categoria inválida! Registre uma categoria."})
+    }
+
+    if (errors.length > 0) {
+        res.render("admin/addposts", {errors: errors})
+    } else {
+        const newPost = {
+            title: req.body.title,
+            slug: req.body.slug,
+            description: req.body.description,
+            content: req.body.content,
+            category: req.body.category
+        }
+        new Post(newPost).save().then(() => {
+            req.flash("success_msg", "Postagem salva com sucesso!")
+            res.redirect('/admin/posts')
+        }).catch((err) => {
+            console.log(err)
+            req.flash("error_msg", "Houve um erro ao salvar a postagem!")
+            res.redirect('/admin/posts')
+        })
+    }
+
 })
 
 module.exports = admin
