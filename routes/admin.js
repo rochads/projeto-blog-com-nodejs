@@ -106,7 +106,16 @@ admin.post("/categories/delete", (req, res) => {
 })
 
 admin.get('/posts', (req, res) => {
-    res.render('admin/posts')
+
+    /* Aula 47: não é populate("categories") e sim populate("category"), pois se refere ao nome do campo no model Post.js, sendo que tem que colocar category.name no html. */
+    
+    Post.find().lean().populate("category").sort({date: "desc"}).then((posts) => {
+        res.render("admin/posts", {posts: posts})
+    }).catch((err) => {
+        console.log(err)
+        req.flash("error_msg", "Houve um erro ao listar as postagens")
+        res.redirect("/admin")
+    })
 })
 
 admin.get('/posts/add', (req, res) => {

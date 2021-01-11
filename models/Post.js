@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Posts = new Schema({
+const Post = new Schema({
 
     title: {
         type: String,
@@ -38,6 +38,6 @@ const Posts = new Schema({
     
 })
 
-/* Criando collection no mongo "posts", com base no model Posts: */
+/* Criando collection no mongo "posts", com base no model Post: */
 
-mongoose.model("posts", Posts)
+mongoose.model("posts", Post)
