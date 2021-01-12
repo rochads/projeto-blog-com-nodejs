@@ -12,10 +12,14 @@
 <h2>Postagens recentes:</h2>
 
 {{#each posts}}
-<div class="card">
+<div class="card" class="mt-4">
     <div class="card-body">
         <h3>{{title}}</h3>
         <p>{{description}}</p>
+        <a href="/posts/{{slug}}" class="btn btn-success">Leia Mais...</a>
+        <hr>
+        <small>Categoria: {{category.name}}</small><br>
+        <small>Data de publicação: {{date}}</small>
     </div>
 </div>
 {{else}}

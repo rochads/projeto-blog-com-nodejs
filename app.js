@@ -53,6 +53,20 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get('/posts/:slug', (req, res) => {
+    Post.findOne({slug: req.params.slug}).lean().then((post) => {
+        if (post) {
+            res.render('post/post', {post: post})
+        } else {
+            req.flash("error_msg", "Esta postagem não existe!")
+            res.redirect('/')
+        }
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro interno!")
+        res.redirect('/')  
+    })
+})
+
 app.get('/posts', (req, res) => {
     res.send('Lista de posts!')
 })
