@@ -159,4 +159,72 @@ admin.post('/posts/new', (req, res) => {
 
 })
 
+admin.get('/posts/edit/:id', (req, res) => {
+
+    /* duas pesquisas em seguida no Mongo: primeiro pesquisou a postagem e depois a categoria da postagem */
+    
+    Post.findOne({_id: req.params.id}).lean().then((post) => {
+        Category.find().lean().then((categories) => {
+            res.render("admin/editposts", {categories: categories, post: post})
+        }).catch((err) => {
+            req.flash("erros_msg", "Houve um erro ao listar as categorias")
+        })
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao carregar o formulário de edição")
+        res.redirect("/admin/posts")
+    })
+})
+
+admin.post('/posts/edit', (req, res) => {
+    // sem sistema de validação para não ficar repetitivo!
+    Post.findOne({_id: req.body.id}).then((post) => {
+
+        post.title = req.body.title
+        post.slug = req.body.slug
+        post.description = req.body.description
+        post.content = req.body.content
+        post.category = req.body.category
+
+        post.save().then(() => {
+            req.flash("success_msg", "Postagem salva com sucesso!")
+            res.redirect('/admin/posts')
+        }).catch((err) => {
+            req.flash("error_msg", "Houve um erro interno ao salvar a edição da postagem!")
+            res.redirect("/admin/posts")
+        })
+
+    }).catch((err) => {
+        console.log(err)
+        req.flash("error_msg", "Houve um erro ao editar a postagem!")
+        res.redirect("/admin/posts")
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = admin
