@@ -212,29 +212,4 @@ admin.get("/posts/delete/:id", (req, res) => {
     })
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = admin
