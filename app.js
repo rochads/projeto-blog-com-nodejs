@@ -10,6 +10,8 @@ const session = require('express-session')
 const flash = require('connect-flash')
 require("./models/Post")
 const Post = mongoose.model("posts")
+require("./models/Category")
+const Category = mongoose.model("categories")
 
 /* SETTINGS */
 /* session - tem que ser configurado no início*/
@@ -53,6 +55,13 @@ app.get('/', (req, res) => {
     })
 })
 
+/* adicionado por minha conta: 
+- uma rota /posts que redireciona para /#post , onde há a lista de postagens
+- no index coloquei um id="posts" para que já vá para a lista de postagens" */
+app.get('/posts', (req, res) => {
+    res.redirect('/#posts')
+})
+
 app.get('/posts/:slug', (req, res) => {
     Post.findOne({slug: req.params.slug}).lean().then((post) => {
         if (post) {
@@ -67,8 +76,35 @@ app.get('/posts/:slug', (req, res) => {
     })
 })
 
-app.get('/posts', (req, res) => {
-    res.send('Lista de posts!')
+app.get("/categories", (req, res) => {
+    Category.find().lean().then((categories) => {
+        res.render('categories/categories', {categories: categories})
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro interno ao listar as categorias!")
+        res.redirect('/')  
+    })
+})
+
+app.get('/categories/:slug', (req, res) => {
+    Category.findOne({slug: req.params.slug}).lean().then((category) => {
+        if (category) {
+
+            Post.find({category: category._id}).lean().then((posts) => {
+                res.render('categories/posts', {posts: posts, category: category})
+
+            }).catch((err) => {
+                req.flash("error_msg", "Houve um erro ao listar as postagens!")
+                res.redirect('/')
+            })
+
+        } else {
+            req.flash("error_msg", "Esta categoria não existe!")
+            res.redirect('/categories')
+        }
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro interno ao carregar a página desta categoria!")
+        res.redirect('/')  
+    })
 })
 
 app.get('/404', (req, res) => {

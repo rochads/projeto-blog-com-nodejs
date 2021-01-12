@@ -1,15 +1,15 @@
 <!-- componente jumbotron não existe mais na v5 do bootstrap e fiz algumas estilizações por minha conta no arquivo style.css na pasta public/css -->
 <div class="jumbotron">
   <h1 class="display-4">Bem-vindo ao blog do NodeJS</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+  <p class="lead">Este é um BLOG simples, desenvolvido com Node.js + Express + MongoDB</p>
   <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p>Aqui você vai poder ler sobre as novidades do mundo da computação.</p>
   <a class="btn btn-primary btn-lg" href="#" role="button">Crie uma conta</a>
 </div>
 
 <hr>
 
-<h2>Postagens recentes:</h2>
+<h2 id="posts">Postagens recentes:</h2>
 
 {{#each posts}}
 <div class="card" class="mt-4">
