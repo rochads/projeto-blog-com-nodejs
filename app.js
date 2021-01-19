@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
 const admin = require('./routes/admin')
+const user = require('./routes/user')
 const session = require('express-session')
 const flash = require('connect-flash')
 require("./models/Post")
@@ -112,6 +113,7 @@ app.get('/404', (req, res) => {
 })
 
 app.use('/admin', admin)
+app.use('/user', user)
 
 /* OTHERS */
 const port = 3000
