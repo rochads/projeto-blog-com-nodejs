@@ -6,6 +6,7 @@ const User = mongoose.model("users")
 
 module.exports = function(passport) {
 
+    // se o name do input type password não for password, tem que colocar o campo passwordField
     passport.use(new localStrategy({usernameField: 'email'}, (email, password, done) => {
 
         User.findOne({email: email}).then((user) => {
