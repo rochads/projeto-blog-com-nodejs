@@ -13,6 +13,8 @@ require("./models/Post")
 const Post = mongoose.model("posts")
 require("./models/Category")
 const Category = mongoose.model("categories")
+const passport = require('passport')
+require("./config/auth")(passport)
 
 /* SETTINGS */
 /* session - tem que ser configurado no início*/
@@ -21,6 +23,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+/* passport - tem que ficar entre session e flash */
+app.use(passport.initialize())
+app.use(passport.session())
 /* flash - tem que ser configurado abaixo da sessão */
 app.use(flash())
 /* Middleware para trabalhar com sessão */
