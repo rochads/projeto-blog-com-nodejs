@@ -1,6 +1,6 @@
 // const { Router } = require('express') // apareceu sozinho (?)
 const express = require('express')
-const admin = express.Router()
+const router = express.Router()
 
 const mongoose = require("mongoose")
 require("../models/Category")
@@ -9,11 +9,11 @@ require("../models/Post")
 const Post = mongoose.model("posts")
 const {isAdmin} = require("../helpers/isAdmin")
 
-admin.get('/', isAdmin, (req, res) => {
+router.get('/', isAdmin, (req, res) => {
     res.render('admin/admin')
 })
 
-admin.get('/categories', isAdmin, (req, res) => {
+router.get('/categories', isAdmin, (req, res) => {
 
     // adicionado .lean() para listar categorias
     // adicionar .sort({date: 'desc'}) depois de .lean() para listar do mais novo para mais antigo
@@ -27,11 +27,11 @@ admin.get('/categories', isAdmin, (req, res) => {
 
 })
 
-admin.get('/categories/add', isAdmin, (req, res) => {
+router.get('/categories/add', isAdmin, (req, res) => {
     res.render('admin/addcategories')
 })
 
-admin.post('/categories/new', isAdmin, (req, res) => {
+router.post('/categories/new', isAdmin, (req, res) => {
 
     let errors = []
 
@@ -66,7 +66,7 @@ admin.post('/categories/new', isAdmin, (req, res) => {
     }
 })
 
-admin.get('/categories/edit/:id', isAdmin, (req, res) => {
+router.get('/categories/edit/:id', isAdmin, (req, res) => {
         Category.findOne({_id: req.params.id}).lean().then((category) => {
             res.render("admin/editcategories", {category: category})
         }).catch((err) => {
@@ -75,7 +75,7 @@ admin.get('/categories/edit/:id', isAdmin, (req, res) => {
         })
 })
 
-admin.post('/categories/edit', isAdmin, (req, res) => {
+router.post('/categories/edit', isAdmin, (req, res) => {
     // sem sistema de validação para não ficar repetitivo!
     Category.findOne({_id: req.body.id}).then((category) => {
 
@@ -96,7 +96,7 @@ admin.post('/categories/edit', isAdmin, (req, res) => {
     })
 })
 
-admin.post("/categories/delete", isAdmin, (req, res) => {
+router.post("/categories/delete", isAdmin, (req, res) => {
     Category.remove({_id: req.body.id}).then(() => {
         req.flash("success_msg", "Categoria deletada com sucesso!")
         res.redirect('/admin/categories')
@@ -106,7 +106,7 @@ admin.post("/categories/delete", isAdmin, (req, res) => {
     })
 })
 
-admin.get('/posts', isAdmin, (req, res) => {
+router.get('/posts', isAdmin, (req, res) => {
 
     /* Aula 47: não é populate("categories") e sim populate("category"), pois se refere ao nome do campo no model Post.js, sendo que tem que colocar category.name no html. */
     
@@ -119,7 +119,7 @@ admin.get('/posts', isAdmin, (req, res) => {
     })
 })
 
-admin.get('/posts/add', isAdmin, (req, res) => {
+router.get('/posts/add', isAdmin, (req, res) => {
     
     Category.find().lean().then((categories) => {
         res.render('admin/addposts', {categories: categories})
@@ -130,7 +130,7 @@ admin.get('/posts/add', isAdmin, (req, res) => {
     
 })
 
-admin.post('/posts/new', isAdmin, (req, res) => {
+router.post('/posts/new', isAdmin, (req, res) => {
 
     let errors = []
 
@@ -160,7 +160,7 @@ admin.post('/posts/new', isAdmin, (req, res) => {
 
 })
 
-admin.get('/posts/edit/:id', isAdmin, (req, res) => {
+router.get('/posts/edit/:id', isAdmin, (req, res) => {
 
     /* duas pesquisas em seguida no Mongo: primeiro pesquisou a postagem e depois a categoria da postagem */
     
@@ -176,7 +176,7 @@ admin.get('/posts/edit/:id', isAdmin, (req, res) => {
     })
 })
 
-admin.post('/posts/edit', isAdmin, (req, res) => {
+router.post('/posts/edit', isAdmin, (req, res) => {
     // sem sistema de validação para não ficar repetitivo!
     Post.findOne({_id: req.body.id}).then((post) => {
 
@@ -203,7 +203,7 @@ admin.post('/posts/edit', isAdmin, (req, res) => {
 
 /* Aula 49: rota get para deletar: não recomendado! */
 
-admin.get("/posts/delete/:id", isAdmin, (req, res) => {
+router.get("/posts/delete/:id", isAdmin, (req, res) => {
     Post.remove({_id: req.params.id}).then(() => {
         req.flash("success_msg", "Postagem deletada com sucesso!")
         res.redirect("/admin/posts")
@@ -213,4 +213,4 @@ admin.get("/posts/delete/:id", isAdmin, (req, res) => {
     })
 })
 
-module.exports = admin
+module.exports = router
