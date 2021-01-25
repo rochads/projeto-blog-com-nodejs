@@ -38,6 +38,7 @@ bower_components
 build/Release
 
 # Dependency directories
+# Professor adicionou o node_modules ao .gitignore (eu já tinha o arquivo com o node_modules)
 node_modules/
 jspm_packages/
 
