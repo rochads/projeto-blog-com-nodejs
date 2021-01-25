@@ -48,7 +48,7 @@ app.set('view engine', 'handlebars');
 mongoose.connect(db.mongoURI).then(() => {
     console.log('Conectado ao MongoDB')
 }).catch((err) => {
-    (`Houve um problema ao conectar ao MongoDB: ${err}`)
+    console.log(`Houve um problema ao conectar ao MongoDB: ${err}`)
 })
 /* public */
 app.use(express.static(path.join(__dirname, 'public')))
