@@ -23,7 +23,7 @@ const Post = new Schema({
         required: true
     },
 
-    /* Relacionando documentos no mongo: ref: "categories" que é a collection criada no model Category. */
+    /* Aula 44: Relacionando documentos no mongo: ref: "categories" que é a collection criada no model Category. */
 
     category: {
         type: Schema.Types.ObjectId,
@@ -38,6 +38,6 @@ const Post = new Schema({
     
 })
 
-/* Criando collection no mongo "posts", com base no model Post: */
+/* Aula 44: Criando collection no mongo "posts", com base no model Post: */
 
 mongoose.model("posts", Post)

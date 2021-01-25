@@ -1,4 +1,5 @@
-/* LOADING MODULES */
+/* ------------ LOADING MODULES ------------ */
+
 const express = require('express')
 const handlebars = require('express-handlebars')
 const app = express()
@@ -17,19 +18,31 @@ const passport = require('passport')
 require("./config/auth")(passport)
 const db = require('./config/db')
 
-/* SETTINGS */
+
+
+
+
+/* ------------ SETTINGS ------------ */
+
 /* session - tem que ser configurado no início*/
+
 app.use(session({
     secret: "cursodenode",
     resave: true,
     saveUninitialized: true
 }))
+
 /* passport - tem que ficar entre session e flash */
+
 app.use(passport.initialize())
 app.use(passport.session())
+
 /* flash - tem que ser configurado abaixo da sessão */
+
 app.use(flash())
+
 /* Middleware para trabalhar com sessão */
+
 app.use((req,res,next) => {
     res.locals.success_msg = req.flash("success_msg")
     res.locals.error_msg = req.flash("error_msg")
@@ -37,23 +50,35 @@ app.use((req,res,next) => {
     res.locals.user = req.user || null
     next()
 })
+
 /* body-parser */
+
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+
 /* handlebars */
+
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+
 /* mongoose */
+
 //mongoose.Promise = global.Promise // aula 35: desconsiderei, pois não houve explicação (obs: não li documentação!).
 mongoose.connect(db.mongoURI).then(() => {
     console.log('Conectado ao MongoDB')
 }).catch((err) => {
     console.log(`Houve um problema ao conectar ao MongoDB: ${err}`)
 })
+
 /* public */
+
 app.use(express.static(path.join(__dirname, 'public')))
 
-/* ROUTES */
+
+
+
+
+/* ------------ ROUTES ------------ */
 
 app.get('/', (req, res) => {
     Post.find().lean().populate("category").sort({date: "desc"}).then((posts) => {
@@ -64,9 +89,12 @@ app.get('/', (req, res) => {
     })
 })
 
-/* adicionado por minha conta: 
+/* 
+adicionado por minha conta: 
 - uma rota /posts que redireciona para /#post , onde há a lista de postagens
-- no index coloquei um id="posts" para que já vá para a lista de postagens" */
+- no index coloquei um id="posts" para que a tela já vá para a lista de postagens" 
+*/
+
 app.get('/posts', (req, res) => {
     res.redirect('/#posts')
 })
@@ -123,7 +151,12 @@ app.get('/404', (req, res) => {
 app.use('/admin', admin)
 app.use('/user', user)
 
-/* OTHERS */
+
+
+
+
+/* ------------ OTHERS ------------ */
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log("Servidor rodando na porta 3000")

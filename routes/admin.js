@@ -1,4 +1,4 @@
-// const { Router } = require('express') // apareceu sozinho (?)
+/* const { Router } = require('express') ==> apareceu sozinho em algum momento e não sei pq! */
 const express = require('express')
 const router = express.Router()
 
@@ -17,9 +17,13 @@ router.get('/categories', isAdmin, (req, res) => {
 
     // adicionado .lean() para listar categorias
     // adicionar .sort({date: 'desc'}) depois de .lean() para listar do mais novo para mais antigo
+
     Category.find().lean().then((categories) => {
+
         //console.log(categories)
+
         res.render('admin/categories', {categories: categories})
+
     }).catch((err) => {
         req.flash("error_msg", "Houve um erro ao listar as categorias!")
         res.redirect('/admin')
@@ -76,7 +80,9 @@ router.get('/categories/edit/:id', isAdmin, (req, res) => {
 })
 
 router.post('/categories/edit', isAdmin, (req, res) => {
+
     // sem sistema de validação para não ficar repetitivo!
+
     Category.findOne({_id: req.body.id}).then((category) => {
 
         category.name = req.body.name
@@ -177,7 +183,9 @@ router.get('/posts/edit/:id', isAdmin, (req, res) => {
 })
 
 router.post('/posts/edit', isAdmin, (req, res) => {
+
     // sem sistema de validação para não ficar repetitivo!
+
     Post.findOne({_id: req.body.id}).then((post) => {
 
         post.title = req.body.title

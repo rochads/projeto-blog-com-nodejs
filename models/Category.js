@@ -12,7 +12,7 @@ const Category = new Schema({
         required: true
     },
 
-    // forçando erro no BD na hora de salvar a categoria para testar a error_msg
+    // POR MINHA CONTA: forçando erro no BD na hora de salvar a categoria para testar a error_msg (o campo test abaixo é required, mas não foi passado no código, logo vai dar erro!)
     /*
     test: {
         type: String,
@@ -27,8 +27,8 @@ const Category = new Schema({
 })
 
 /*
-Poderia ser:
-Const Category = new mongoose.Schema (eliminaria linhas 2 e 4)
+Aula 35:
+Poderia ser: Const Category = new mongoose.Schema() (juntaria linhas 2 e 4 em uma)
 */
 
 mongoose.model('categories', Category)
