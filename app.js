@@ -15,6 +15,7 @@ require("./models/Category")
 const Category = mongoose.model("categories")
 const passport = require('passport')
 require("./config/auth")(passport)
+const db = require('./config/db')
 
 /* SETTINGS */
 /* session - tem que ser configurado no início*/
@@ -44,7 +45,7 @@ app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 /* mongoose */
 //mongoose.Promise = global.Promise // aula 35: desconsiderei, pois não houve explicação (obs: não li documentação!).
-mongoose.connect("mongodb://localhost/blogapp").then(() => {
+mongoose.connect(db.mongoURI).then(() => {
     console.log('Conectado ao MongoDB')
 }).catch((err) => {
     (`Houve um problema ao conectar ao MongoDB: ${err}`)
@@ -123,7 +124,7 @@ app.use('/admin', admin)
 app.use('/user', user)
 
 /* OTHERS */
-const port = 3000
+const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log("Servidor rodando na porta 3000")
 })
